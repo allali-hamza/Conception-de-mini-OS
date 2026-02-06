@@ -2,9 +2,8 @@
 #include <inttypes.h>
 #include "ecran.h"
 #include "horloge.h"
+#include "gestion_processus.h"
 
-extern void traitant_IT_32(void);                     // label ASM défini dans traitants.S
-void init_traitant_IT(uint32_t num_IT, void (*traitant)(void)); // écriture IDT[32]
 // on peut s'entrainer a utiliser GDB avec ce code de base
 // par exemple afficher les valeurs de x, n et res avec la commande display
 
@@ -22,20 +21,23 @@ uint32_t fact(uint32_t n)
 
 void kernel_start(void)
 {
+    
     efface_ecran();
-    uint32_t x = fact(5);
-    console_putbytes("Hello world", 11);
-    console_putbytes("\n", 1);
-    console_putbytes("jj", 2);
 
-    init_traitant_IT(32u, traitant_IT_32);
+    init_traitant_IT(32, traitant_IT_32);
 
-    regle_freq();
-    masque_IRQ(0u, false);   // false = démasqué
+    init_horloge();
 
-    sti();
-    // quand on saura gerer l'ecran, on pourra afficher x
-    (void)x;
+    masque_IRQ(0, false);
+
+    // sti(); 
+    //printf("game over\n");
+    //printf("time to go\t");
+    //printf("I need to sleep rn");
+    initialiser_processus(); // 
+    idle();
+   
+
     // on ne doit jamais sortir de kernel_start
     while (1) {
         // cette fonction arrete le processeur

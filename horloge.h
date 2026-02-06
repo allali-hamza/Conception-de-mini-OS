@@ -1,23 +1,28 @@
-#pragma once
-#include <inttypes.h>
-#include <stdbool.h>
+#ifndef HORLOGE_H
+#define HORLOGE_H
 
-/* Fréquence du quartz du PIT (≈ 1.193182 MHz) */
-#define QUARTZ     0x1234DDu
 
-/* Fréquence des interruptions (ticks/seconde) */
-#define CLOCKFREQ  50u   // 50 Hz → 20 ms entre interruptions
+#include "stdio.h"
+#include "cpu.h"
+#include "inttypes.h"
+#include "string.h"
+#include "ecran.h"
+#include "stdbool.h"
+#include "segment.h"
 
-/* Affiche une chaîne (HH:MM:SS) en haut à droite de l’écran */
-void ecrit_temps(const char *s, int len);
+extern uint32_t compteur_de_temps;
 
-/* Traitant C appelé par le stub assembleur (traitant_IT_32) */
-void tic_PIT(void);
+void ecrit_temps(const char* s, int len);
 
-/* Configure la fréquence du PIT */
-void regle_freq(void);
+void init_traitant_IT(uint32_t num_IT, void (*traitant)(void));
 
-/* (Dé)masque une IRQ du PIC maître (0..7)
-   - masque = true  → masque l’IRQ
-   - masque = false → démasque l’IRQ */
+void tic_PIT(void);   // je dois regarder comment utiliser la fonction sprintf
+
 void masque_IRQ(uint32_t num_IRQ, bool masque);
+
+void init_horloge(void);
+
+extern void traitant_IT_32(void);
+
+
+#endif
