@@ -1,0 +1,5 @@
+Chaque source d’interruption porte un numéro unique (sur x86, il y en a 256) afin de permettre au
+processeur de l’identifier. Lorsque le processeur reçoit l’interruption N, il consulte la case numéro N d’une
+table appelée table des vecteurs d’interruption pour trouver l’adresse en mémoire du traitant à appeler.
+
+
